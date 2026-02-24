@@ -71,12 +71,47 @@ public class Mapa {
 
     // Lanzar excepción de operador no aplicable
     private Estado aplicar ( Estado estado, Operador operador ) {
-        return null;
+        int x, y;
+        
+        y = estado.getRow() + operador.getDRow();   // Nueva Fila
+        x = estado.getCol() + operador.getDCol();   // Nueva Columna
+
+        if ( y < 0 || y >= this.rows || x < 0 || x >= this.cols ) { // Si fuera del mapa
+            return null;
+        }
+
+        return new Estado( y, x, operador.getNCarretera() );
     }
 
-    private List<Operador> operadores ( Estado estado ) {
+    public List<Operador> operadores ( Estado estado ) {
         List<Operador> operadores = new ArrayList<>();
+        int i, x, y;
         
+        y = estado.getRow();
+        x = estado.getCol();
+
+        if ( y < 0 || y >= this.rows || x < 0 || x >= this.cols ) { // Si fuera del mapa
+            return null;
+        }
+
+        int movs[][] = {
+            {0,-1},     // Izquierda
+            {-1,0},     // Arriba
+            {1,0},      // Abajo            
+            {0,1}       // Derecha    
+        };
+
+        for ( i = 0; i < movs.length; i++ ) {
+            
+            y = estado.getRow() + movs[i][0];   // Nueva Fila
+            x = estado.getCol() + movs[i][1];   // Nueva Columna
+            
+            if ( y >= 0 && y < this.rows && x >= 0 && x < this.cols ) {     // Si no fuera del mapa
+                if ( this.mapa[y][x] != Carretera.VACIO ) {                 // Y no es casilla vacia
+                    operadores.add( new Operador(movs[i][0], movs[i][1], this.mapa[y][x]));
+                }
+            }
+        }
 
         return operadores;
     }

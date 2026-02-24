@@ -16,6 +16,40 @@ public class Estado {
         this.carretera = carretera;
     }
 
+    /* GETTERS */
+
+    // Devuelve la fila del estado
+    public int getRow() {
+        return this.row;
+    }
+
+    // Devuelve la columna del estado
+    public int getCol() {
+        return this.col;
+    }
+
+    // Devuelve la carretera asociada al estado
+    public Carretera getCarretera() {
+        return this.carretera;
+    }
+
+    /* SETTERS */
+
+    // Establece la fila del estado
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    // Establece la columna del estado
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+    // Establece la carretera asociada al estado
+    public void setCarretera(Carretera carretera) {
+        this.carretera = carretera;
+    }
+
     /* MÉTODOS */
 
     /* public List<Estado> sucesores ( ) {
@@ -36,4 +70,8 @@ public class Estado {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'operadores'");
     } */
+
+    public String toString() {
+        return "E(" + this.row + "," + this.col + "," + this.carretera.getSimbolo() + ")";
+    }
 }

@@ -15,4 +15,25 @@ public class Operador {
         this.dcol = dcol;
         this.ncarretera = ncarretera;
     }
+
+    public String toString () {
+        return "Op(" + this.drow + "," + this.dcol + "," + this.ncarretera.getSimbolo() + ")";
+    }
+
+    /* GETTERS */
+
+    // Devuelve la fila del estado
+    public int getDRow() {
+        return this.drow;
+    }
+
+    // Devuelve la columna del estado
+    public int getDCol() {
+        return this.dcol;
+    }
+
+    // Devuelve la carretera asociada al estado
+    public Carretera getNCarretera() {
+        return this.ncarretera;
+    }
 }
