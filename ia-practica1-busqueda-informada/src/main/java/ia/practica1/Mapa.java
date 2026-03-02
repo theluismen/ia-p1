@@ -1,10 +1,16 @@
 package ia.practica1;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Scanner;
+import java.util.Set;
+
+import ia.practica1.exceptions.SinSolucion;
 
 public class Mapa {
 
@@ -13,24 +19,35 @@ public class Mapa {
     private int rows;
     private int cols;
     private Carretera[][] mapa;
+    private Estado estadoInicial;
+    private Estado estadoFinal;
 
     /* CONSTRUCTOR */
 
-    public Mapa ( int rows, int cols, String datafile ) throws IOException {
+    public Mapa ( int rows, int cols, String dataFilename ) throws FileNotFoundException {
         this.rows = rows;
         this.cols = cols;
         this.mapa = new Carretera[rows][cols];
-        this.cargarMapa(datafile);
+        this.cargarMapa(dataFilename);
+    }
+    
+    public Mapa ( int rows, int cols, String dataFilename, Estado estadoInicial, Estado estadoFinal ) throws FileNotFoundException {
+        this.rows = rows;
+        this.cols = cols;
+        this.mapa = new Carretera[rows][cols];
+        this.estadoInicial = estadoInicial;
+        this.estadoFinal = estadoFinal;
+        this.cargarMapa(dataFilename);
     }
 
     /* MÉTODOS */
 
-    private void cargarMapa ( String datafile ) throws IOException {
+    private void cargarMapa ( String dataFilename ) throws FileNotFoundException {
         Scanner scanner;
         Carretera carretera;
         int i,j;
 
-        scanner = new Scanner ( new File( datafile ) );
+        scanner = new Scanner ( new File( dataFilename ) );
         i = 0;
         while ( scanner.hasNextLine() ) {
             j = 0;
@@ -68,21 +85,7 @@ public class Mapa {
 
         return sucesores;
     }
-
-    // Lanzar excepción de operador no aplicable
-    private Estado aplicar ( Estado estado, Operador operador ) {
-        int x, y;
-        
-        y = estado.getRow() + operador.getDRow();   // Nueva Fila
-        x = estado.getCol() + operador.getDCol();   // Nueva Columna
-
-        if ( y < 0 || y >= this.rows || x < 0 || x >= this.cols ) { // Si fuera del mapa
-            return null;
-        }
-
-        return new Estado( y, x, operador.getNCarretera() );
-    }
-
+    
     public List<Operador> operadores ( Estado estado ) {
         List<Operador> operadores = new ArrayList<>();
         int i, x, y;
@@ -114,5 +117,59 @@ public class Mapa {
         }
 
         return operadores;
+    }
+
+    // Lanzar excepción de operador no aplicable
+    private Estado aplicar ( Estado estado, Operador operador ) {
+        int x, y;
+        
+        y = estado.getRow() + operador.getDRow();   // Nueva Fila
+        x = estado.getCol() + operador.getDCol();   // Nueva Columna
+
+        if ( y < 0 || y >= this.rows || x < 0 || x >= this.cols ) { // Si fuera del mapa
+            return null;
+        }
+
+        return new Estado( y, x, operador.getNCarretera() );
+    }
+
+    public List<Estado> bestFirst () throws SinSolucion {
+        PriorityQueue<Estado> pends = new PriorityQueue<>( (e1,e2) -> {
+            return Float.compare( e1.getH(), e2.getH() );
+        });
+        List<Estado> solucion = null, camino = null;
+        Set<Estado> trats = new HashSet<>();
+        boolean encontrado = false;
+        Estado actual;
+        
+        /* Inicializar Cola Prioridad */
+        this.estadoInicial.setH(1);
+        pends.add( this.estadoInicial );
+
+        /* Bucle de Búsqueda */
+        while ( ! encontrado && ! pends.isEmpty() ) {
+            actual = pends.poll();
+
+            if ( actual.equals( estadoFinal ) ) {
+                encontrado = true;
+                solucion = actual.getCamino();
+            } else {
+                for ( Estado sucesor : this.sucesores(actual) ) {
+                    if ( ! trats.contains(sucesor) && ! pends.contains(sucesor)) {
+                        camino = actual.getCamino();
+                        camino.add(sucesor);
+                        sucesor.setCamino( camino );
+                        sucesor.setH(1);
+                        pends.add(sucesor);
+                    }
+                }
+                trats.add(actual);
+            }
+        }
+
+        if ( encontrado ) {
+            return solucion;
+        }
+        throw new SinSolucion();
     }
 }
