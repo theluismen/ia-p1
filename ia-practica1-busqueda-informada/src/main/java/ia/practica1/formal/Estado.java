@@ -1,4 +1,4 @@
-package ia.practica1;
+package ia.practica1.formal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +10,8 @@ public class Estado implements Comparable<Estado>{
     private int row;                // Fila
     private int col;                // Columna
     private Carretera carretera;    // Tipo Carretera
-    private List<Estado> camino;    // Camino hasta el Estado
     private float h;                // Valor de la Heuristica
+    private List<Estado> camino;    // Camino hasta el Estado
 
     /* CONSTRUCTOR */
 

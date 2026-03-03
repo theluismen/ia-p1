@@ -2,8 +2,12 @@ package ia.practica1;
 
 import static org.junit.Assert.assertTrue;
 import ia.practica1.exceptions.SinSolucion;
+import ia.practica1.formal.Carretera;
+import ia.practica1.formal.Estado;
+import ia.practica1.formal.Mapa;
+import ia.practica1.formal.Solucion;
+
 import org.junit.Test;
-import java.util.List;
 import java.io.FileNotFoundException;
 
 
@@ -23,7 +27,7 @@ public class AppTest
     @Test
     public void test01 () {
         Mapa mapa;
-        List<Estado> solucion;
+        Solucion solucion;
 
         try {
             mapa = new Mapa(
@@ -36,10 +40,14 @@ public class AppTest
 
             solucion = mapa.bestFirst();
 
-            for ( Estado e : solucion ) {
+            for ( Estado e : solucion.getCamino() ) {
                 System.out.println(e);
-            } 
+            }
+
+            System.out.println( solucion.getNIter() );
+            
             assertTrue(true);
+
         } catch ( FileNotFoundException e ) {
             System.out.println("Buscando en: " + new java.io.File(".").getAbsolutePath());
             e.printStackTrace();

@@ -1,6 +1,6 @@
 package ia.practica1.heuristicas;
 
-import ia.practica1.Estado;
+import ia.practica1.formal.Estado;
 
 public abstract class Heuristica {
     

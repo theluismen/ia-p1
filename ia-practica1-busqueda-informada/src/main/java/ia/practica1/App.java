@@ -2,6 +2,10 @@ package ia.practica1;
 
 import java.io.FileNotFoundException;
 
+import ia.practica1.formal.Carretera;
+import ia.practica1.formal.Estado;
+import ia.practica1.formal.Mapa;
+
 /**
  * Hello world!
  *

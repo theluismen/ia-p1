@@ -1,14 +1,13 @@
-package ia.practica1;
+package ia.practica1.formal;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Set;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Scanner;
-import java.util.Set;
 
 import ia.practica1.exceptions.SinSolucion;
 
@@ -133,17 +132,19 @@ public class Mapa {
         return new Estado( y, x, operador.getNCarretera() );
     }
 
-    public List<Estado> bestFirst () throws SinSolucion {
+    public Solucion bestFirst () throws SinSolucion {
         PriorityQueue<Estado> pends = new PriorityQueue<>( (e1,e2) -> {
             return Float.compare( e1.getH(), e2.getH() );
         });
-        List<Estado> solucion = null, camino = null;
+        Solucion solucion = null;
         Set<Estado> trats = new HashSet<>();
         boolean encontrado = false;
+        int niter = 0;
         Estado actual;
         
         /* Inicializar Cola Prioridad */
         this.estadoInicial.setH(1);
+        this.estadoInicial.getCamino().add(this.estadoInicial);
         pends.add( this.estadoInicial );
 
         /* Bucle de Búsqueda */
@@ -152,19 +153,20 @@ public class Mapa {
 
             if ( actual.equals( estadoFinal ) ) {
                 encontrado = true;
-                solucion = actual.getCamino();
+                solucion = new Solucion ( actual.getCamino(), niter );
             } else {
                 for ( Estado sucesor : this.sucesores(actual) ) {
-                    if ( ! trats.contains(sucesor) && ! pends.contains(sucesor)) {
-                        camino = actual.getCamino();
+                    if ( ! trats.contains(sucesor) && ! pends.contains(sucesor) ) {
+                        List<Estado> camino = new ArrayList<>( actual.getCamino() );
                         camino.add(sucesor);
-                        sucesor.setCamino( camino );
                         sucesor.setH(1);
+                        sucesor.setCamino( camino );
                         pends.add(sucesor);
                     }
                 }
                 trats.add(actual);
             }
+            niter++;
         }
 
         if ( encontrado ) {

@@ -1,4 +1,4 @@
-package ia.practica1;
+package ia.practica1.formal;
 
 public enum Carretera {
     AUTOVIA('A'),
