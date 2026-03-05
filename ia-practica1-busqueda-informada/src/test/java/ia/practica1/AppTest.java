@@ -1,6 +1,7 @@
 package ia.practica1;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import ia.practica1.exceptions.SinSolucion;
 import ia.practica1.formal.Carretera;
 import ia.practica1.formal.Estado;
@@ -16,14 +17,15 @@ import java.io.FileNotFoundException;
  */
 public class AppTest 
 {
-    /**
-     * Rigorous Test :-)
-     */
-    @Test
-    public void shouldAnswerWithTrue () {
-        assertTrue( true );
+
+    public void mostrarReporte ( Solucion solucion, String algoritmo ) {
+        System.out.println();
+        System.out.println("Camino -> Coste:   " + solucion.getCoste());
+        System.out.println("Camino -> Estados: " + solucion.getCamino().size());
+        System.out.println( algoritmo + " -> Iteraciones: " + solucion.getNIter());
+        System.out.println();
     }
-    
+
     @Test
     public void test01 () {
         Mapa mapa;
@@ -40,20 +42,15 @@ public class AppTest
             );
 
             solucion = mapa.bestFirst();
-
-            for ( Estado e : solucion.getCamino() ) {
-                System.out.println(e);
-            }
-
-            System.out.println( solucion.getNIter() );
             
-            assertTrue(true);
-
+            mapa.mostrarMapaConCamino( solucion.getCamino() );
+            this.mostrarReporte(solucion, "BF");
+            
         } catch ( FileNotFoundException e ) {
             System.out.println("Buscando en: " + new java.io.File(".").getAbsolutePath());
             e.printStackTrace();
         } catch ( SinSolucion e ) {
-            System.out.println("Sin Sol");
+            fail("Tiene Solucion pero no lo encuentra");
         }
     }
 }

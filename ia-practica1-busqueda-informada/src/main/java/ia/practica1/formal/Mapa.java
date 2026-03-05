@@ -64,9 +64,28 @@ public class Mapa {
     }
 
     public void mostrarMapa () {
-        for (int i = 0; i < this.rows; i++) {
-            for (int j = 0; j < this.cols; j++) {
-                System.out.print(this.mapa[i][j].getSimbolo() + " ");
+        int i, j;
+        for ( i = 0; i < this.rows; i++ ) {
+            for ( j = 0; j < this.cols; j++ ) {
+                System.out.print( this.mapa[i][j].getSimbolo() + " " );
+            }
+            System.out.println();
+        }
+    }
+    
+    public void mostrarMapaConCamino ( List<Estado> camino ) {
+        int i, j;
+        Estado estado = new Estado(0, 0, null);
+
+        for ( i = 0; i < this.rows; i++ ) {
+            for ( j = 0; j < this.cols; j++ ) {
+                estado.setRow(i);
+                estado.setCol(j);
+                if ( camino.contains( estado ) ) {
+                    System.out.print( this.mapa[i][j].getSimbolo() + " " );
+                } else {
+                    System.out.print(". ");
+                }
             }
             System.out.println();
         }
@@ -153,6 +172,7 @@ public class Mapa {
                 if ( ! trats.contains(sucesor) && ! pends.contains(sucesor) ) {
                     sucesor.setHeuristica( this.heuristica.evaluar( sucesor ) );
                     sucesor.setPadre( actual );
+                    sucesor.setCoste( actual );
                     pends.add(sucesor);
                 }
             }
