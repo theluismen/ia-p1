@@ -10,6 +10,7 @@ import java.util.PriorityQueue;
 import java.util.Scanner;
 
 import ia.practica1.exceptions.SinSolucion;
+import ia.practica1.heuristicas.Heuristica;
 
 public class Mapa {
 
@@ -18,24 +19,19 @@ public class Mapa {
     private int rows;
     private int cols;
     private Carretera[][] mapa;
-    private Estado estadoInicial;
-    private Estado estadoFinal;
+    private Estado inicial;
+    private Estado destino;
+    private Heuristica heuristica;
 
     /* CONSTRUCTOR */
 
-    public Mapa ( int rows, int cols, String dataFilename ) throws FileNotFoundException {
+    public Mapa ( int rows, int cols, String dataFilename, Estado inicial, Estado destino, Heuristica heuristica ) throws FileNotFoundException {
         this.rows = rows;
         this.cols = cols;
         this.mapa = new Carretera[rows][cols];
-        this.cargarMapa(dataFilename);
-    }
-    
-    public Mapa ( int rows, int cols, String dataFilename, Estado estadoInicial, Estado estadoFinal ) throws FileNotFoundException {
-        this.rows = rows;
-        this.cols = cols;
-        this.mapa = new Carretera[rows][cols];
-        this.estadoInicial = estadoInicial;
-        this.estadoFinal = estadoFinal;
+        this.inicial = inicial;
+        this.destino = destino;
+        this.heuristica = heuristica;
         this.cargarMapa(dataFilename);
     }
 
@@ -93,7 +89,7 @@ public class Mapa {
         x = estado.getCol();
 
         if ( y < 0 || y >= this.rows || x < 0 || x >= this.cols ) { // Si fuera del mapa
-            return null;
+            return operadores;
         }
 
         int movs[][] = {
@@ -108,8 +104,9 @@ public class Mapa {
             y = estado.getRow() + movs[i][0];   // Nueva Fila
             x = estado.getCol() + movs[i][1];   // Nueva Columna
             
-            if ( y >= 0 && y < this.rows && x >= 0 && x < this.cols ) {     // Si no fuera del mapa
-                if ( this.mapa[y][x] != Carretera.VACIO ) {                 // Y no es casilla vacia
+            // Si no fuera del mapa Y no es casilla vacia
+            if ( y >= 0 && y < this.rows && x >= 0 && x < this.cols && this.mapa[y][x] != Carretera.VACIO ) {     
+                if ( this.mapa[y][x] != Carretera.VACIO ) {                 
                     operadores.add( new Operador(movs[i][0], movs[i][1], this.mapa[y][x]));
                 }
             }
@@ -138,28 +135,29 @@ public class Mapa {
         });
         Solucion solucion = null;
         Set<Estado> trats = new HashSet<>();
+        List<Estado> camino;
         boolean encontrado = false;
         int niter = 0;
         Estado actual;
         
         /* Inicializar Cola Prioridad */
-        this.estadoInicial.setH(1);
-        this.estadoInicial.getCamino().add(this.estadoInicial);
-        pends.add( this.estadoInicial );
+        this.inicial.setH( this.heuristica.evaluar( this.inicial, this.destino ) );
+        this.inicial.getCamino().add( this.inicial );
+        pends.add( this.inicial );
 
         /* Bucle de Búsqueda */
         while ( ! encontrado && ! pends.isEmpty() ) {
             actual = pends.poll();
 
-            if ( actual.equals( estadoFinal ) ) {
+            if ( actual.equals( destino ) ) {
                 encontrado = true;
                 solucion = new Solucion ( actual.getCamino(), niter );
             } else {
                 for ( Estado sucesor : this.sucesores(actual) ) {
                     if ( ! trats.contains(sucesor) && ! pends.contains(sucesor) ) {
-                        List<Estado> camino = new ArrayList<>( actual.getCamino() );
+                        camino = new ArrayList<>( actual.getCamino() );
                         camino.add(sucesor);
-                        sucesor.setH(1);
+                        sucesor.setH( this.heuristica.evaluar( sucesor, this.destino ) );
                         sucesor.setCamino( camino );
                         pends.add(sucesor);
                     }
@@ -167,6 +165,9 @@ public class Mapa {
                 trats.add(actual);
             }
             niter++;
+            if (niter % 1000 == 0) {
+                System.out.println("Iteración: " + niter + " - Pendientes: " + pends.size());
+            }
         }
 
         if ( encontrado ) {
