@@ -6,14 +6,10 @@ import ia.practica1.formal.Carretera;
 import ia.practica1.formal.Estado;
 import ia.practica1.formal.Mapa;
 import ia.practica1.formal.Solucion;
-import ia.practica1.heuristicas.Constante;
 import ia.practica1.heuristicas.DistanciaManhattan;
 
 import org.junit.Test;
 import java.io.FileNotFoundException;
-
-import javax.xml.crypto.dsig.spec.HMACParameterSpec;
-
 
 /**
  * Unit test for simple App.
@@ -40,7 +36,7 @@ public class AppTest
                 "../data/default-map-10x10.csv",
                 new Estado (0,0, Carretera.NACIONAL),
                 new Estado (9,9, Carretera.NACIONAL),
-                new Constante ()
+                new DistanciaManhattan ()
             );
 
             solucion = mapa.bestFirst();

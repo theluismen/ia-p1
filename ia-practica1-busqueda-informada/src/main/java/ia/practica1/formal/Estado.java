@@ -1,17 +1,14 @@
 package ia.practica1.formal;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class Estado implements Comparable<Estado>{
+public class Estado {
 
     /* ATRIBUTOS */
 
     private int row;                // Fila
     private int col;                // Columna
     private Carretera carretera;    // Tipo Carretera
-    private float h;                // Valor de la Heuristica
-    private List<Estado> camino;    // Camino hasta el Estado
+    private float heuristica;       // Valor de la Heuristica
+    private Estado padre;           // Camino hasta el Estado
 
     /* CONSTRUCTOR */
 
@@ -19,82 +16,85 @@ public class Estado implements Comparable<Estado>{
         this.row = row;
         this.col = col;
         this.carretera = carretera;
-        this.camino = new ArrayList<>();
-    }
-    
-    public Estado ( int row, int col, Carretera carretera, float h ) {
-        this.row = row;
-        this.col = col;
-        this.carretera = carretera;
-        this.camino = new ArrayList<>();
-        this.h = h;
+        this.padre = null;
     }
 
     /* GETTERS */
 
     // Devuelve la fila del estado
-    public int getRow() {
+    public int getRow( ) {
         return this.row;
     }
 
     // Devuelve la columna del estado
-    public int getCol() {
+    public int getCol () {
         return this.col;
     }
 
     // Devuelve la carretera asociada al estado
-    public Carretera getCarretera() {
+    public Carretera getCarretera () {
         return this.carretera;
     }
     
-    // Devuelve el camino asociado al estado
-    public List<Estado> getCamino() {
-        return this.camino;
+    // Devuelve el estado anterior del estado
+    public Estado getPadre () {
+        return this.padre;
     }
 
     // Devuelve la heuristica asociada al estado
-    public float getH() {
-        return this.h;
+    public float getHeuristica () {
+        return this.heuristica;
     }
     
     /* SETTERS */
 
     // Establece la fila del estado
-    public void setRow(int row) {
+    public void setRow ( int row ) {
         this.row = row;
     }
 
     // Establece la columna del estado
-    public void setCol(int col) {
+    public void setCol ( int col ) {
         this.col = col;
     }
 
     // Establece la carretera asociada al estado
-    public void setCarretera(Carretera carretera) {
+    public void setCarretera ( Carretera carretera ) {
         this.carretera = carretera;
     }
     
-    // Establece la heruristica asociada al estado
-    public void setCamino ( List<Estado> camino ) {
-        this.camino = camino ;
+    // Establece el estado padre asociada al estado
+    public void setPadre ( Estado padre ) {
+        this.padre = padre;
     }
     
     // Establece la heruristica asociada al estado
-    public void setH( float h ) {
-        this.h = h ;
+    public void setHeuristica ( float h ) {
+        this.heuristica = h ;
     }
 
     /* MÉTODOS */
 
-    public String toString() {
+    public String toString () {
         return "E(" + this.row + "," + this.col + "," + this.carretera.getSimbolo() + ")";
     }
 
-    public int compareTo( Estado estado ) {
-        return Float.compare( this.h, estado.getH() );
+    /* Sin estos .equals() y .hashCode(), los algoritmos de busqueda no van */
+
+    @Override
+    public boolean equals( Object o ) {
+        if ( this == o )
+            return true;
+
+        if ( o == null || this.getClass() != o.getClass() )
+            return false;
+
+        Estado estado = (Estado) o;
+        return this.row == estado.row && this.col == estado.col;
     }
 
-    public boolean equals ( Estado estado ) {
-        return this.row == estado.getRow() && this.col == estado.getCol();
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(row, col);
     }
 }

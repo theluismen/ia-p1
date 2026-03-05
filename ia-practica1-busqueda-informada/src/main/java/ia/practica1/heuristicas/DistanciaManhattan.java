@@ -2,11 +2,11 @@ package ia.practica1.heuristicas;
 
 import ia.practica1.formal.Estado;
 
-public class DistanciaManhattan implements Heuristica {
+public class DistanciaManhattan extends Heuristica {
 
     @Override
-    public float evaluar( Estado sucesor, Estado destino ) {
-        return Math.abs( sucesor.getRow() - destino.getRow() ) + Math.abs( sucesor.getCol() - destino.getCol() );
+    public float evaluar ( Estado sucesor ) {
+        return Math.abs( sucesor.getRow() - super.destino.getRow() ) + Math.abs( sucesor.getCol() - destino.getCol() );
     }
     
 }

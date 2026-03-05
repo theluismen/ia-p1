@@ -32,6 +32,7 @@ public class Mapa {
         this.inicial = inicial;
         this.destino = destino;
         this.heuristica = heuristica;
+        this.heuristica.setDestino(this.destino);
         this.cargarMapa(dataFilename);
     }
 
@@ -131,48 +132,47 @@ public class Mapa {
 
     public Solucion bestFirst () throws SinSolucion {
         PriorityQueue<Estado> pends = new PriorityQueue<>( (e1,e2) -> {
-            return Float.compare( e1.getH(), e2.getH() );
+            return Float.compare( e1.getHeuristica(), e2.getHeuristica() );
         });
-        Solucion solucion = null;
         Set<Estado> trats = new HashSet<>();
-        List<Estado> camino;
-        boolean encontrado = false;
-        int niter = 0;
         Estado actual;
+        int niter = 0;
         
         /* Inicializar Cola Prioridad */
-        this.inicial.setH( this.heuristica.evaluar( this.inicial, this.destino ) );
-        this.inicial.getCamino().add( this.inicial );
+        this.inicial.setHeuristica( this.heuristica.evaluar( this.inicial ) );
         pends.add( this.inicial );
 
         /* Bucle de Búsqueda */
-        while ( ! encontrado && ! pends.isEmpty() ) {
+        while ( ! pends.isEmpty() ) {
             actual = pends.poll();
 
-            if ( actual.equals( destino ) ) {
-                encontrado = true;
-                solucion = new Solucion ( actual.getCamino(), niter );
-            } else {
-                for ( Estado sucesor : this.sucesores(actual) ) {
-                    if ( ! trats.contains(sucesor) && ! pends.contains(sucesor) ) {
-                        camino = new ArrayList<>( actual.getCamino() );
-                        camino.add(sucesor);
-                        sucesor.setH( this.heuristica.evaluar( sucesor, this.destino ) );
-                        sucesor.setCamino( camino );
-                        pends.add(sucesor);
-                    }
+            if ( actual.equals( destino ) ) 
+                return new Solucion ( this.camino( actual ), niter );
+             
+            for ( Estado sucesor : this.sucesores( actual ) ) {
+                if ( ! trats.contains(sucesor) && ! pends.contains(sucesor) ) {
+                    sucesor.setHeuristica( this.heuristica.evaluar( sucesor ) );
+                    sucesor.setPadre( actual );
+                    pends.add(sucesor);
                 }
-                trats.add(actual);
             }
+            
+            trats.add(actual);
             niter++;
-            if (niter % 1000 == 0) {
-                System.out.println("Iteración: " + niter + " - Pendientes: " + pends.size());
-            }
         }
 
-        if ( encontrado ) {
-            return solucion;
-        }
         throw new SinSolucion();
+    }
+
+    private List<Estado> camino ( Estado estado ) {
+        List<Estado> camino = new ArrayList<>();
+        Estado temporal = estado;
+
+        while ( temporal != null ) {
+            camino.add( 0, temporal );
+            temporal = temporal.getPadre();
+        }
+
+        return camino;
     }
 }
