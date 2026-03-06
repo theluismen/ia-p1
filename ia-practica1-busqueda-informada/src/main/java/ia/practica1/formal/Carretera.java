@@ -15,4 +15,5 @@ public enum Carretera {
     public char getSimbolo () {
         return simbolo;
     }
+    
 }

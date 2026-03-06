@@ -2,12 +2,12 @@ package ia.practica1.formal;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Set;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.Scanner;
+import java.util.Set;
 
 import ia.practica1.exceptions.SinSolucion;
 import ia.practica1.heuristicas.Heuristica;
@@ -195,4 +195,48 @@ public class Mapa {
 
         return camino;
     }
+
+    // Amb A* sempre trobarem la solució òptima quan el valor estimat del node
+    // a l'estat final es igual o mes petit que el cost real.
+    public Solucion AStar () throws SinSolucion{
+
+        PriorityQueue<Estado> pendents = new PriorityQueue<>( (e1,e2) -> {
+            return Double.compare( e1.getF(), e2.getF() );
+        });
+
+        Solucion solucion = null;
+        Set<Estado> tractats = new HashSet<>();
+        boolean encontrado = false;
+        int niter = 0;
+        Heuristica h;
+        Estado actual;
+
+        /* Inicializar pendientes */
+        this.estadoInicial.setH(h.getTemps());
+        this.estadoInicial.getCamino().add(this.estadoInicial);
+        pendents.add( this.estadoInicial );
+
+        while((!encontrado)&&(!pendents.isEmpty())){
+            actual = pendents.poll();
+            niter++;
+            if (actual.equals(estadoFinal)){
+                encontrado=true;
+                solucion=new Solucion(actual.getCamino(), niter);
+            }
+            else{
+                for( Estado sucesor : this.sucesores(actual) ){
+                    if(! tractats.contains(sucesor) && ! pendents.contains(sucesor)){
+                        pendents=
+                    }
+                    else if(){
+
+
+
+                    }
+                }
+            }
+        }
+
+    }
+
 }
