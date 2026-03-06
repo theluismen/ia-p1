@@ -167,7 +167,7 @@ public class Mapa {
 
             if ( actual.equals( destino ) ) 
                 return new Solucion ( this.camino( actual ), niter );
-             
+            
             for ( Estado sucesor : this.sucesores( actual ) ) {
                 if ( ! trats.contains(sucesor) && ! pends.contains(sucesor) ) {
                     sucesor.setHeuristica( this.heuristica.evaluar( sucesor ) );
@@ -212,31 +212,40 @@ public class Mapa {
         Estado actual;
 
         /* Inicializar pendientes */
-        this.estadoInicial.setH(h.getTemps());
-        this.estadoInicial.getCamino().add(this.estadoInicial);
-        pendents.add( this.estadoInicial );
+        this.inicial.setHeuristica( this.heuristica.evaluar( this.inicial ) );
+        pendents.add( this.inicial );
 
         while((!encontrado)&&(!pendents.isEmpty())){
             actual = pendents.poll();
-            niter++;
-            if (actual.equals(estadoFinal)){
+            if (actual.equals(destino)){
                 encontrado=true;
-                solucion=new Solucion(actual.getCamino(), niter);
+                solucion=new Solucion(this.camino(actual), niter);
             }
             else{
                 for( Estado sucesor : this.sucesores(actual) ){
-                    if(! tractats.contains(sucesor) && ! pendents.contains(sucesor)){
-                        pendents=
-                    }
-                    else if(){
+                    if(! tractats.contains(sucesor)){
 
+                        if(! pendents.contains(sucesor)){
+                            sucesor.setHeuristica(this.heuristica.evaluar(sucesor));
+                            sucesor.setPadre(actual);
+                            sucesor.setCoste(actual);
+                        }
+                        else if(){
 
+                        }
 
                     }
                 }
+                tractats.add(actual);
+                niter++;
             }
+            }
+        if(encontrado){
+            return solucion;
         }
-
+        else{
+            throw new SinSolucion();
+        }
     }
 
-}
+    }

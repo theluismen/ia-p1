@@ -7,7 +7,7 @@ public class Solucion {
 
     /* ATRIBUTOS */
 
-    private List<Estado> camino;    // Camino      
+    private List<Estado> camino;    // Camino
     private float coste;            // Coste Total Camino
     private int   niter;            // Número de Iteraciones
     
