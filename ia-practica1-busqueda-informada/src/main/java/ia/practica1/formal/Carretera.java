@@ -1,33 +1,34 @@
 package ia.practica1.formal;
 
 public enum Carretera {
-    AUTOVIA('A'),
-    NACIONAL('N'),
-    COMARCAL('C'),
-    VACIO('.');
 
-    private final char simbolo;
+    /* LITERALES */
 
-    Carretera ( char simbolo ) {
+    AUTOVIA('A', 0.5f),
+    NACIONAL('N', 1f),
+    COMARCAL('C', 2f),
+    VACIO('.', 0f);
+
+    /* ATRIBUTOS */
+
+    private final char  simbolo;
+    private final float valor;
+
+    /* CONSTRUCTOR */
+
+    Carretera ( char simbolo, float valor ) {
         this.simbolo = simbolo;
+        this.valor   = valor;
     }
+
+    /* MÉTODOS */
 
     public char getSimbolo () {
         return simbolo;
     }
 
-    public float getValor(){
-        switch (simbolo){
-            case 'A':
-                return 0.5f;
-            case 'N':
-                return 1f;
-            case 'C':
-                return 2f;
-            default:
-                return 0;
-            
-        }
+    public float getValor () {
+        return valor;
     }
-    
+
 }

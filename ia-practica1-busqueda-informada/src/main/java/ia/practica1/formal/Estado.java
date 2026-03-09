@@ -18,6 +18,7 @@ public class Estado {
         this.col = col;
         this.carretera = carretera;
         this.padre = null;
+        this.coste = 0.0f;
     }
 
     /* GETTERS */
@@ -85,29 +86,13 @@ public class Estado {
     }
 
     // devuelve 3 o 0 si el tipo de carretera difiere del antecesor o no
-    public float difCarretera( Estado antecesor ){
-        float coste=0;
-        if ( this.carretera != antecesor.carretera ){
-            coste += 3.0f;
-        }
-        return coste;
+    public float difCarretera ( Estado antecesor ){
+        return ( this.carretera != antecesor.carretera ) ? 3.0f : 0.0f ;
     }
 
     // Establece el coste temporal asociado a este estado desde 
-    public void setCoste( Estado antecesor ) {
-        float coste = 0;
-        
-        if ( this.carretera != antecesor.carretera ) 
-            coste += 3.0f;
-
-        switch ( this.carretera ) {
-            case Carretera.AUTOVIA:  coste += 0.5f; break;
-            case Carretera.NACIONAL: coste += 1.0f; break;
-            case Carretera.COMARCAL: coste += 2.0f; break;
-            default:
-        }
-
-        this.coste = this.padre.coste + coste;
+    public void setCoste ( Estado antecesor ) {
+        this.coste = this.padre.coste + this.difCarretera(antecesor) + this.carretera.getValor();
     }
 
     /* MÉTODOS */
