@@ -223,15 +223,24 @@ public class Mapa {
             }
             else{
                 for( Estado sucesor : this.sucesores(actual) ){
+
                     if(! tractats.contains(sucesor)){
 
+                        double nouCost = actual.getCoste() + sucesor.getCarretera().getValor() + sucesor.difCarretera(actual);
+
                         if(! pendents.contains(sucesor)){
+                            sucesor.setPadre(actual);
                             sucesor.setHeuristica(this.heuristica.evaluar(sucesor));
+                            sucesor.setCoste(actual);
+
+                            pendents.add(sucesor);
+                        }
+                        else if(nouCost<sucesor.getCoste()){
                             sucesor.setPadre(actual);
                             sucesor.setCoste(actual);
-                        }
-                        else if(){
 
+                            pendents.remove(sucesor);
+                            pendents.add(sucesor);
                         }
 
                     }
