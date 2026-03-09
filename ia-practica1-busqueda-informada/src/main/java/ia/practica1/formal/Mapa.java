@@ -208,7 +208,6 @@ public class Mapa {
         Set<Estado> tractats = new HashSet<>();
         boolean encontrado = false;
         int niter = 0;
-        Heuristica h;
         Estado actual;
 
         /* Inicializar pendientes */
