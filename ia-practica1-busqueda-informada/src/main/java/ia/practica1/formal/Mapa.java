@@ -36,6 +36,14 @@ public class Mapa {
         this.cargarMapa(dataFilename);
     }
 
+    public Estado getInicial(){
+        return this.inicial;
+    }
+
+    public Heuristica getHeuristica(){
+        return this.heuristica;
+    }
+
     /* MÉTODOS */
 
     private void cargarMapa ( String dataFilename ) throws FileNotFoundException {
@@ -60,7 +68,7 @@ public class Mapa {
             i++;
         }
 
-        scanner.close();        
+        scanner.close();
     }
 
     public void mostrarMapa () {
