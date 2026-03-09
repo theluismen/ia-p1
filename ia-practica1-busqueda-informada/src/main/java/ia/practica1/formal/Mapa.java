@@ -13,15 +13,21 @@ import ia.practica1.exceptions.SinSolucion;
 import ia.practica1.heuristicas.Heuristica;
 
 public class Mapa {
-
+    
     /* ATRIBUTOS */
-
+    
     private int rows;
     private int cols;
     private Carretera[][] mapa;
     private Estado inicial;
     private Estado destino;
     private Heuristica heuristica;
+    private static int movs[][] = { 
+        { 0, -1 },      // Izquierda
+        { -1, 0 },      // Arriba    
+        { 1, 0 },       // Abajo
+        { 0, 1 }        // Derecha
+    };
 
     /* CONSTRUCTOR */
 
@@ -36,13 +42,13 @@ public class Mapa {
         this.cargarMapa(dataFilename);
     }
 
-    public Estado getInicial(){
+    /* public Estado getInicial(){
         return this.inicial;
     }
 
     public Heuristica getHeuristica(){
         return this.heuristica;
-    }
+    } */
 
     /* MÉTODOS */
 
@@ -99,62 +105,42 @@ public class Mapa {
         }
     }
 
+    private boolean dentroMapa ( int row, int col ) {
+        return row >= 0 && row < this.rows && col >= 0 && col < this.cols;
+    }
+
     public List<Estado> sucesores ( Estado estado ) {
         List<Estado> sucesores = new ArrayList<>();
+        int i, col, row;
 
-        for ( Operador operador : this.operadores(estado) ) {
-            sucesores.add( this.aplicar(estado, operador) );
+        if ( ! this.dentroMapa( estado.getRow(), estado.getCol() ) ) // Si fuera del mapa
+            return sucesores;
+
+
+        for ( i = 0; i < movs.length; i++ ) {
+
+            row = estado.getRow() + movs[i][0]; // Nueva Fila
+            col = estado.getCol() + movs[i][1]; // Nueva Columna
+
+            // Si dentro del mapa Y no es casilla vacia
+            if ( this.dentroMapa(row, col) && this.mapa[row][col] != Carretera.VACIO ) {
+                sucesores.add(new Estado(row, col, this.mapa[row][col]));
+            }
         }
 
         return sucesores;
     }
     
-    public List<Operador> operadores ( Estado estado ) {
-        List<Operador> operadores = new ArrayList<>();
-        int i, x, y;
-        
-        y = estado.getRow();
-        x = estado.getCol();
+    private List<Estado> camino ( Estado estado ) {
+        List<Estado> camino = new ArrayList<>();
+        Estado temporal = estado;
 
-        if ( y < 0 || y >= this.rows || x < 0 || x >= this.cols ) { // Si fuera del mapa
-            return operadores;
+        while ( temporal != null ) {
+            camino.add( 0, temporal );
+            temporal = temporal.getPadre();
         }
 
-        int movs[][] = {
-            {0,-1},     // Izquierda
-            {-1,0},     // Arriba
-            {1,0},      // Abajo            
-            {0,1}       // Derecha    
-        };
-
-        for ( i = 0; i < movs.length; i++ ) {
-            
-            y = estado.getRow() + movs[i][0];   // Nueva Fila
-            x = estado.getCol() + movs[i][1];   // Nueva Columna
-            
-            // Si no fuera del mapa Y no es casilla vacia
-            if ( y >= 0 && y < this.rows && x >= 0 && x < this.cols && this.mapa[y][x] != Carretera.VACIO ) {     
-                if ( this.mapa[y][x] != Carretera.VACIO ) {                 
-                    operadores.add( new Operador(movs[i][0], movs[i][1], this.mapa[y][x]));
-                }
-            }
-        }
-
-        return operadores;
-    }
-
-    // Lanzar excepción de operador no aplicable
-    private Estado aplicar ( Estado estado, Operador operador ) {
-        int x, y;
-        
-        y = estado.getRow() + operador.getDRow();   // Nueva Fila
-        x = estado.getCol() + operador.getDCol();   // Nueva Columna
-
-        if ( y < 0 || y >= this.rows || x < 0 || x >= this.cols ) { // Si fuera del mapa
-            return null;
-        }
-
-        return new Estado( y, x, operador.getNCarretera() );
+        return camino;
     }
 
     public Solucion bestFirst () throws SinSolucion {
@@ -190,18 +176,6 @@ public class Mapa {
         }
 
         throw new SinSolucion();
-    }
-
-    private List<Estado> camino ( Estado estado ) {
-        List<Estado> camino = new ArrayList<>();
-        Estado temporal = estado;
-
-        while ( temporal != null ) {
-            camino.add( 0, temporal );
-            temporal = temporal.getPadre();
-        }
-
-        return camino;
     }
 
     // Amb A* sempre trobarem la solució òptima quan el valor estimat del node
@@ -264,4 +238,4 @@ public class Mapa {
         }
     }
 
-    }
+}
