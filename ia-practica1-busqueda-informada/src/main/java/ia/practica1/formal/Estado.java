@@ -84,6 +84,15 @@ public class Estado {
         this.heuristica = h ;
     }
 
+    // devuelve 3 o 0 si el tipo de carretera difiere del antecesor o no
+    public float difCarretera( Estado antecesor ){
+        float coste=0;
+        if ( this.carretera != antecesor.carretera ){
+            coste += 3.0f;
+        }
+        return coste;
+    }
+
     // Establece el coste temporal asociado a este estado desde 
     public void setCoste( Estado antecesor ) {
         float coste = 0;
