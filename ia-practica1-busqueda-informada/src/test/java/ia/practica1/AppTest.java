@@ -34,7 +34,7 @@ public class AppTest
     }
 
     /**
-     * Test 01
+     * Test:        01
      * Mapa:        default-map-10x10.csv ( DEFAULT )
      * Algoritmo:   Best-First
      * Heurística:  Distancia Manhattan
@@ -71,7 +71,7 @@ public class AppTest
     
 
     /**
-     * Test 02
+     * Test:        02
      * Mapa:        default-map-10x10.csv ( DEFAULT )
      * Algoritmo:   Best-First
      * Heurística:  Distancia Euclídea
@@ -107,7 +107,7 @@ public class AppTest
     }
     
     /**
-     * Test 03
+     * Test:        03
      * Mapa:        default-map-10x10.csv ( DEFAULT )
      * Algoritmo:   Best-First
      * Heurística:  - poner una h y quitar constante
@@ -143,7 +143,7 @@ public class AppTest
     }
     
     /**
-     * Test 03
+     * Test:        04
      * Mapa:        default-map-10x10.csv ( DEFAULT )
      * Algoritmo:   A Star
      * Heurística:  Distancia Manhattan
@@ -179,7 +179,7 @@ public class AppTest
     }
 
     /**
-     * Test 04
+     * Test:        05
      * Mapa:        default-map-10x10.csv ( DEFAULT )
      * Algoritmo:   A Star
      * Heurística:  Distancia Euclídea
@@ -215,7 +215,7 @@ public class AppTest
     }
 
     /**
-     * Test 03
+     * Test:        06
      * Mapa:        default-map-10x10.csv ( DEFAULT )
      * Algoritmo:   A Star
      * Heurística:  - poner una h y quitar constante
@@ -228,17 +228,161 @@ public class AppTest
         try {
 
             mapa = new Mapa(
-                10,
-                10,
-                "../data/default-map-10x10.csv",
-                new Estado(0, 0, Carretera.NACIONAL),
-                new Estado(9, 9, Carretera.NACIONAL),
-                new Constante()
-            );
+                    10,
+                    10,
+                    "../data/default-map-10x10.csv",
+                    new Estado(0, 0, Carretera.NACIONAL),
+                    new Estado(9, 9, Carretera.NACIONAL),
+                    new Constante());
 
             solucion = mapa.AStar();
 
             this.mostrarTitulo("##### TEST 06 #####");
+            mapa.mostrarMapaConCamino(solucion.getCamino());
+            this.mostrarReporte(solucion, "A*");
+
+        } catch (FileNotFoundException e) {
+            System.out.println("Buscando en: " + new java.io.File(".").getAbsolutePath());
+            fail("No se encontró el fichero del mapa.");
+        } catch (SinSolucion e) {
+            fail("Tiene Solucion pero no lo encuentra");
+        }
+    }
+
+    /**
+     * Test:        07
+     * Mapa:        custom-map-10x10.csv ( CUSTOM )
+     * Algoritmo:   Best-First
+     * Heurística:  Distancia Manhattan
+     */
+    @Test
+    public void test07 () {
+        Mapa mapa;
+        Solucion solucion;
+
+        try {
+
+            mapa = new Mapa (
+                10,
+                10,
+                "../data/custom-map-10x10.csv",
+                new Estado (2,1, Carretera.NACIONAL),
+                new Estado (5,9, Carretera.NACIONAL),
+                new DistanciaManhattan ()
+            );
+
+            solucion = mapa.bestFirst();
+            
+            this.mostrarTitulo("##### TEST 07 #####");
+            mapa.mostrarMapaConCamino(solucion.getCamino());
+            this.mostrarReporte(solucion, "BF");
+
+        } catch ( FileNotFoundException e ) {
+            System.out.println("Buscando en: " + new java.io.File(".").getAbsolutePath());
+            fail("No se encontró el fichero del mapa.");
+        } catch ( SinSolucion e ) {
+            fail("Tiene Solucion pero no lo encuentra");
+        }
+    }
+    
+
+    /**
+     * Test:        08
+     * Mapa:        custom-map-10x10.csv ( CUSTOM )
+     * Algoritmo:   Best-First
+     * Heurística:  Distancia Euclídea
+     */
+    @Test
+    public void test08 () {
+        Mapa mapa;
+        Solucion solucion;
+
+        try {
+
+            mapa = new Mapa (
+                10,
+                10,
+                "../data/custom-map-10x10.csv",
+                    new Estado(2, 1, Carretera.NACIONAL),
+                    new Estado(5, 9, Carretera.NACIONAL),
+                new DistanciaEuclidea ()
+            );
+
+            solucion = mapa.bestFirst();
+            
+            this.mostrarTitulo("##### TEST 08 #####");
+            mapa.mostrarMapaConCamino(solucion.getCamino());
+            this.mostrarReporte(solucion, "BF");
+
+        } catch ( FileNotFoundException e ) {
+            System.out.println("Buscando en: " + new java.io.File(".").getAbsolutePath());
+            fail("No se encontró el fichero del mapa.");
+        } catch ( SinSolucion e ) {
+            fail("Tiene Solucion pero no lo encuentra");
+        }
+    }
+    
+    /**
+     * Test:        09
+     * Mapa:        custom-map-10x10.csv ( CUSTOM )
+     * Algoritmo:   Best-First
+     * Heurística:  - poner una h y quitar constante
+     */
+    @Test
+    public void test09 () {
+        Mapa mapa;
+        Solucion solucion;
+
+        try {
+
+            mapa = new Mapa (
+                10,
+                10,
+                "../data/custom-map-10x10.csv",
+                    new Estado(2, 1, Carretera.NACIONAL),
+                    new Estado(5, 9, Carretera.NACIONAL),
+                new Constante ()
+            );
+
+            solucion = mapa.bestFirst();
+            
+            this.mostrarTitulo("##### TEST 09 #####");
+            mapa.mostrarMapaConCamino(solucion.getCamino());
+            this.mostrarReporte(solucion, "BF");
+
+        } catch ( FileNotFoundException e ) {
+            System.out.println("Buscando en: " + new java.io.File(".").getAbsolutePath());
+            fail("No se encontró el fichero del mapa.");
+        } catch ( SinSolucion e ) {
+            fail("Tiene Solucion pero no lo encuentra");
+        }
+    }
+    
+    /**
+     * Test:        10
+     * Mapa:        custom-map-10x10.csv ( CUSTOM )
+     * Algoritmo:   A Star
+     * Heurística:  Distancia Manhattan
+     */
+    @Test
+    public void test10 () {
+        Mapa mapa;
+        Solucion solucion;
+
+        try {
+
+            mapa = new Mapa (
+                10,
+                10,
+                "../data/custom-map-10x10.csv",
+                    new Estado(2, 1, Carretera.NACIONAL),
+                    new Estado(5, 9, Carretera.NACIONAL),
+                new DistanciaManhattan ()
+            );
+
+            solucion = mapa.AStar();
+            
+            this.mostrarTitulo("##### TEST 10 #####");
             mapa.mostrarMapaConCamino(solucion.getCamino());
             this.mostrarReporte(solucion, "A*");
 
@@ -249,4 +393,77 @@ public class AppTest
             fail("Tiene Solucion pero no lo encuentra");
         }
     }
+
+    /**
+     * Test:        11
+     * Mapa:        custom-map-10x10.csv ( CUSTOM )
+     * Algoritmo:   A Star
+     * Heurística:  Distancia Euclídea
+     */
+    @Test
+    public void test11 () {
+        Mapa mapa;
+        Solucion solucion;
+
+        try {
+
+            mapa = new Mapa(
+                10,
+                10,
+                "../data/custom-map-10x10.csv",
+                    new Estado(2, 1, Carretera.NACIONAL),
+                    new Estado(5, 9, Carretera.NACIONAL),
+                new DistanciaEuclidea()
+            );
+
+            solucion = mapa.AStar();
+
+            this.mostrarTitulo("##### TEST 11 #####");
+            mapa.mostrarMapaConCamino(solucion.getCamino());
+            this.mostrarReporte(solucion, "A*");
+
+        } catch ( FileNotFoundException e ) {
+            System.out.println("Buscando en: " + new java.io.File(".").getAbsolutePath());
+            fail("No se encontró el fichero del mapa.");
+        } catch ( SinSolucion e ) {
+            fail("Tiene Solucion pero no lo encuentra");
+        }
+    }
+
+    /**
+     * Test:        12
+     * Mapa:        custom-map-10x10.csv ( CUSTOM )
+     * Algoritmo:   A Star
+     * Heurística:  - poner una h y quitar constante
+     */
+    @Test
+    public void test12 () {
+        Mapa mapa;
+        Solucion solucion;
+
+        try {
+
+            mapa = new Mapa(
+                10,
+                10,
+                "../data/custom-map-10x10.csv",
+                    new Estado(2, 1, Carretera.NACIONAL),
+                    new Estado(5, 9, Carretera.NACIONAL),
+                new Constante()
+            );
+
+            solucion = mapa.AStar();
+
+            this.mostrarTitulo("##### TEST 12 #####");
+            mapa.mostrarMapaConCamino(solucion.getCamino());
+            this.mostrarReporte(solucion, "A*");
+
+        } catch ( FileNotFoundException e ) {
+            System.out.println("Buscando en: " + new java.io.File(".").getAbsolutePath());
+            fail("No se encontró el fichero del mapa.");
+        } catch ( SinSolucion e ) {
+            fail("Tiene Solucion pero no lo encuentra");
+        }
+    }
+
 }
