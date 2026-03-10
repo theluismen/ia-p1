@@ -186,56 +186,46 @@ public class Mapa {
             return Double.compare( e1.getF(), e2.getF() );
         });
 
-        Solucion solucion = null;
         Set<Estado> tractats = new HashSet<>();
-        boolean encontrado = false;
         int niter = 0;
+        double nouCost;
         Estado actual;
 
         /* Inicializar pendientes */
         this.inicial.setHeuristica( this.heuristica.evaluar( this.inicial ) );
         pendents.add( this.inicial );
 
-        while((!encontrado)&&(!pendents.isEmpty())){
+        while( ! pendents.isEmpty() ){
             actual = pendents.poll();
-            if (actual.equals(destino)){
-                encontrado=true;
-                solucion=new Solucion(this.camino(actual), niter);
-            }
-            else{
-                for( Estado sucesor : this.sucesores(actual) ){
 
-                    if(! tractats.contains(sucesor)){
+            if ( actual.equals( this.destino ) )
+                return new Solucion(this.camino(actual), niter);
+            
+            for ( Estado sucesor : this.sucesores(actual) ) { 
+                if ( ! tractats.contains(sucesor) ) {
 
-                        double nouCost = actual.getCoste() + sucesor.getCarretera().getValor() + sucesor.difCarretera(actual);
+                    nouCost = actual.getCoste() + sucesor.getCarretera().getValor() + sucesor.difCarretera(actual);
 
-                        if(! pendents.contains(sucesor)){
-                            sucesor.setPadre(actual);
-                            sucesor.setHeuristica(this.heuristica.evaluar(sucesor));
-                            sucesor.setCoste(actual);
-
-                            pendents.add(sucesor);
-                        }
-                        else if(nouCost<sucesor.getCoste()){
-                            sucesor.setPadre(actual);
-                            sucesor.setCoste(actual);
-
-                            pendents.remove(sucesor);
-                            pendents.add(sucesor);
-                        }
-
+                    if ( ! pendents.contains(sucesor) ) {
+                        sucesor.setPadre(actual);
+                        sucesor.setHeuristica(this.heuristica.evaluar(sucesor));
+                        sucesor.setCoste(actual);
+                        pendents.add(sucesor);
+                    } 
+                    else if ( nouCost<sucesor.getCoste() ) {
+                        sucesor.setPadre(actual);
+                        sucesor.setCoste(actual);
+                        pendents.remove(sucesor);
+                        pendents.add(sucesor);
                     }
                 }
-                tractats.add(actual);
-                niter++;
             }
-            }
-        if(encontrado){
-            return solucion;
+            
+            tractats.add(actual);
+            niter++;
         }
-        else{
-            throw new SinSolucion();
-        }
+        
+        throw new SinSolucion();
     }
 
 }
