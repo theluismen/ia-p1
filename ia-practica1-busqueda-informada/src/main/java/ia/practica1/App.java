@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import ia.practica1.formal.Carretera;
 import ia.practica1.formal.Estado;
 import ia.practica1.formal.Mapa;
-import ia.practica1.heuristicas.*;
 
 /**
  * Hello world!
@@ -23,8 +22,7 @@ public class App
                 10,
                 "data/default-map-10x10.csv",
                 new Estado(0, 0, Carretera.NACIONAL),
-                new Estado(9, 9, Carretera.NACIONAL),
-                new Constante()    
+                new Estado(9, 9, Carretera.NACIONAL)
             );
 
             mapa.mostrarMapa();

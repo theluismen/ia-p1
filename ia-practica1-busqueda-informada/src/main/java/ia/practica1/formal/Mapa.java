@@ -21,7 +21,6 @@ public class Mapa {
     private Carretera[][] mapa;
     private Estado inicial;
     private Estado destino;
-    private Heuristica heuristica;
     private static int movs[][] = { 
         { 0, -1 },      // Izquierda
         { -1, 0 },      // Arriba    
@@ -31,24 +30,14 @@ public class Mapa {
 
     /* CONSTRUCTOR */
 
-    public Mapa ( int rows, int cols, String dataFilename, Estado inicial, Estado destino, Heuristica heuristica ) throws FileNotFoundException {
+    public Mapa ( int rows, int cols, String dataFilename, Estado inicial, Estado destino ) throws FileNotFoundException {
         this.rows = rows;
         this.cols = cols;
         this.mapa = new Carretera[rows][cols];
         this.inicial = inicial;
         this.destino = destino;
-        this.heuristica = heuristica;
-        this.heuristica.setDestino(this.destino);
         this.cargarMapa(dataFilename);
     }
-
-    /* public Estado getInicial(){
-        return this.inicial;
-    }
-
-    public Heuristica getHeuristica(){
-        return this.heuristica;
-    } */
 
     /* MÉTODOS */
 
@@ -143,7 +132,7 @@ public class Mapa {
         return camino;
     }
 
-    public Solucion bestFirst () throws SinSolucion {
+    public Solucion bestFirst ( Heuristica heuristica ) throws SinSolucion {
         PriorityQueue<Estado> pends = new PriorityQueue<>( (e1,e2) -> {
             return Float.compare( e1.getHeuristica(), e2.getHeuristica() );
         });
@@ -151,8 +140,9 @@ public class Mapa {
         Estado actual;
         int niter = 0;
         
-        /* Inicializar Cola Prioridad */
-        this.inicial.setHeuristica( this.heuristica.evaluar( this.inicial ) );
+        /* Inicializaciones */
+        heuristica.setDestino(this.destino);
+        this.inicial.setHeuristica( heuristica.evaluar( this.inicial ) );
         pends.add( this.inicial );
 
         /* Bucle de Búsqueda */
@@ -164,7 +154,7 @@ public class Mapa {
             
             for ( Estado sucesor : this.sucesores( actual ) ) {
                 if ( ! trats.contains(sucesor) && ! pends.contains(sucesor) ) {
-                    sucesor.setHeuristica( this.heuristica.evaluar( sucesor ) );
+                    sucesor.setHeuristica( heuristica.evaluar( sucesor ) );
                     sucesor.setPadre( actual );
                     sucesor.setCoste( actual );
                     pends.add(sucesor);
@@ -180,7 +170,7 @@ public class Mapa {
 
     // Amb A* sempre trobarem la solució òptima quan el valor estimat del node
     // a l'estat final es igual o mes petit que el cost real.
-    public Solucion AStar () throws SinSolucion {
+    public Solucion AStar ( Heuristica heuristica ) throws SinSolucion {
 
         PriorityQueue<Estado> pendents = new PriorityQueue<>( (e1,e2) -> {
             return Double.compare( e1.getF(), e2.getF() );
@@ -191,8 +181,9 @@ public class Mapa {
         double nouCost;
         Estado actual;
 
-        /* Inicializar pendientes */
-        this.inicial.setHeuristica( this.heuristica.coste( this.inicial ) );
+        /* Inicializaciones */
+        heuristica.setDestino(this.destino);
+        this.inicial.setHeuristica( heuristica.coste( this.inicial ) );
         pendents.add( this.inicial );
 
         while( ! pendents.isEmpty() ){
@@ -208,7 +199,7 @@ public class Mapa {
 
                     if ( ! pendents.contains(sucesor) ) {
                         sucesor.setPadre(actual);
-                        sucesor.setHeuristica(this.heuristica.coste(sucesor));
+                        sucesor.setHeuristica(heuristica.coste(sucesor));
                         sucesor.setCoste(actual);
                         pendents.add(sucesor);
                     } 
