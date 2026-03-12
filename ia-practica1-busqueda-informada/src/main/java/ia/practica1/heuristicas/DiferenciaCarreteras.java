@@ -7,11 +7,12 @@ public class DiferenciaCarreteras extends Heuristica {
     @Override
     public float evaluar(Estado sucesor){
 
-        float costeActual = sucesor.getCarretera().getValor();
-        float costeDestino = destino.getCarretera().getValor();
+    float costeActual = sucesor.getCarretera().getValor();
 
-        float dif = costeActual + costeDestino;
+    if (sucesor.getCarretera().getSimbolo() == destino.getCarretera().getSimbolo()) {
+        return 0; // prioridad máxima, heurística mínima
+    }
+    return costeActual;
 
-        return dif;
     }
 }

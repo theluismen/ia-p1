@@ -3,6 +3,7 @@ package ia.practica1;
 import static org.junit.Assert.*;
 
 import java.io.FileNotFoundException;
+
 import org.junit.Test;
 
 import ia.practica1.exceptions.SinSolucion;
@@ -11,6 +12,7 @@ import ia.practica1.formal.Estado;
 import ia.practica1.formal.Mapa;
 import ia.practica1.formal.Solucion;
 import ia.practica1.heuristicas.Constante;
+import ia.practica1.heuristicas.DiferenciaCarreteras;
 import ia.practica1.heuristicas.DistanciaEuclidea;
 import ia.practica1.heuristicas.DistanciaManhattan;
 
@@ -52,7 +54,7 @@ public class AppTest
                 "../data/default-map-10x10.csv",
                 new Estado (0,0, Carretera.NACIONAL),
                 new Estado (9,9, Carretera.NACIONAL),
-                new DistanciaManhattan ()
+                new DiferenciaCarreteras ()
             );
 
             solucion = mapa.bestFirst();
