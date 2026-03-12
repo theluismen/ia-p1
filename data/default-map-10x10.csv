@@ -1,10 +1,10 @@
-N,N,N,N,C,V,A,V,V,N
-C,V,A,V,C,V,A,V,V,N
-C,V,A,V,C,V,A,A,A,N
-C,C,C,C,C,V,A,V,V,N
-C,V,A,V,C,V,A,N,N,N
-C,V,A,V,C,C,A,C,C,N
-C,V,A,V,V,V,A,V,V,N
-A,A,A,A,A,A,A,V,V,N
-C,V,V,V,V,V,A,N,V,N
-C,N,N,N,N,V,A,N,V,N
+N N N N C V A V V N
+C V A V C V A V V N
+C V A V C V A A A N
+C C C C C V A V V N
+C V A V C V A N N N
+C V A V C C A C C N
+C V A V V V A V V N
+A A A A A A A V V N
+C V V V V V A N V N
+C N N N N V A N V N

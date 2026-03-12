@@ -50,7 +50,7 @@ public class Mapa {
         i = 0;
         while ( scanner.hasNextLine() ) {
             j = 0;
-            for ( String str : scanner.nextLine().split(",") ) {
+            for ( String str : scanner.nextLine().split(" ") ) {
                 switch ( str.charAt(0) ) {
                     case 'A': carretera = Carretera.AUTOVIA;  break;
                     case 'N': carretera = Carretera.NACIONAL; break;
