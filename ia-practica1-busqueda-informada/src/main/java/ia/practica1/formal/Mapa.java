@@ -192,7 +192,7 @@ public class Mapa {
         Estado actual;
 
         /* Inicializar pendientes */
-        this.inicial.setHeuristica( this.heuristica.evaluar( this.inicial ) );
+        this.inicial.setHeuristica( this.heuristica.evaluar( this.inicial ) * 0.5f );
         pendents.add( this.inicial );
 
         while( ! pendents.isEmpty() ){
@@ -208,7 +208,7 @@ public class Mapa {
 
                     if ( ! pendents.contains(sucesor) ) {
                         sucesor.setPadre(actual);
-                        sucesor.setHeuristica(this.heuristica.evaluar(sucesor));
+                        sucesor.setHeuristica(this.heuristica.evaluar(sucesor) * 0.5f);
                         sucesor.setCoste(actual);
                         pendents.add(sucesor);
                     } 
