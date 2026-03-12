@@ -13,6 +13,8 @@ public abstract class Heuristica {
     /* MÉTODOS */
 
     public abstract float evaluar ( Estado sucesor );
+    
+    public abstract float coste ( Estado sucesor );
 
     public void setDestino ( Estado destino ) {
         this.destino = destino;

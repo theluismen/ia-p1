@@ -180,7 +180,7 @@ public class Mapa {
 
     // Amb A* sempre trobarem la solució òptima quan el valor estimat del node
     // a l'estat final es igual o mes petit que el cost real.
-    public Solucion AStar () throws SinSolucion{
+    public Solucion AStar () throws SinSolucion {
 
         PriorityQueue<Estado> pendents = new PriorityQueue<>( (e1,e2) -> {
             return Double.compare( e1.getF(), e2.getF() );
@@ -192,7 +192,7 @@ public class Mapa {
         Estado actual;
 
         /* Inicializar pendientes */
-        this.inicial.setHeuristica( this.heuristica.evaluar( this.inicial ) * 0.5f );
+        this.inicial.setHeuristica( this.heuristica.coste( this.inicial ) );
         pendents.add( this.inicial );
 
         while( ! pendents.isEmpty() ){
@@ -208,11 +208,11 @@ public class Mapa {
 
                     if ( ! pendents.contains(sucesor) ) {
                         sucesor.setPadre(actual);
-                        sucesor.setHeuristica(this.heuristica.evaluar(sucesor) * 0.5f);
+                        sucesor.setHeuristica(this.heuristica.coste(sucesor));
                         sucesor.setCoste(actual);
                         pendents.add(sucesor);
                     } 
-                    else if ( nouCost<sucesor.getCoste() ) {
+                    else if ( nouCost < sucesor.getCoste() ) {
                         sucesor.setPadre(actual);
                         sucesor.setCoste(actual);
                         pendents.remove(sucesor);

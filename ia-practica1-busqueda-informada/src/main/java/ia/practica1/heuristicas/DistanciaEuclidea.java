@@ -1,5 +1,6 @@
 package ia.practica1.heuristicas;
 
+import ia.practica1.formal.Carretera;
 import ia.practica1.formal.Estado;
 
 public class DistanciaEuclidea extends Heuristica {
@@ -11,4 +12,8 @@ public class DistanciaEuclidea extends Heuristica {
         return (float) Math.sqrt( dx*dx + dy*dy );
     }
     
+    @Override
+    public float coste( Estado sucesor ) {
+        return this.evaluar(sucesor) * Carretera.AUTOVIA.getValor();
+    }
 }

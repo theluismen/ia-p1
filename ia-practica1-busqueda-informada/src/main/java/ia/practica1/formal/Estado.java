@@ -50,7 +50,7 @@ public class Estado {
 
     // Devuelve la distancia para A* f(x)=g(n)+h(n)
     public double getF() {
-        return coste + this.heuristica;
+        return this.coste + this.heuristica;
     }
     
     // Devuelve el coste asociado desde el inicio hasta este estado

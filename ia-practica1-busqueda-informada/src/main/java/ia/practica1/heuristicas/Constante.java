@@ -6,7 +6,12 @@ public class Constante extends Heuristica {
 
 	@Override
     public float evaluar ( Estado sucesor ) {
-        return 1.0f;
+        return 0.0f;
+    }
+
+    @Override
+    public float coste( Estado sucesor ) {
+        return 0.0f;
     }
     
 }
