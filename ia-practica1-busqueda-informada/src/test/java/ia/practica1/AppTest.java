@@ -259,8 +259,8 @@ public class AppTest {
                 10,
                 10,
                 "../data/custom-map-10x10.csv",
-                new Estado(2, 1, Carretera.NACIONAL),
-                new Estado(5, 9, Carretera.NACIONAL)
+                new Estado(0, 0, Carretera.NACIONAL),
+                new Estado(9, 9, Carretera.NACIONAL)
             );
 
             solucion = mapa.bestFirst( new DistanciaManhattan() );
@@ -294,8 +294,8 @@ public class AppTest {
                 10,
                 10,
                 "../data/custom-map-10x10.csv",
-                new Estado(2, 1, Carretera.NACIONAL),
-                new Estado(5, 9, Carretera.NACIONAL)
+                new Estado(0, 0, Carretera.NACIONAL),
+                new Estado(9, 9, Carretera.NACIONAL)
             );
 
             solucion = mapa.bestFirst( new DistanciaEuclidea() );
@@ -329,8 +329,8 @@ public class AppTest {
                 10,
                 10,
                 "../data/custom-map-10x10.csv",
-                new Estado(2, 1, Carretera.NACIONAL),
-                new Estado(5, 9, Carretera.NACIONAL)
+                new Estado(0, 0, Carretera.NACIONAL),
+                new Estado(9, 9, Carretera.NACIONAL)
             );
 
             solucion = mapa.bestFirst( new DiferenciaCarreteras() );
@@ -364,8 +364,9 @@ public class AppTest {
                 10,
                 10,
                 "../data/custom-map-10x10.csv",
-                new Estado(2, 1, Carretera.NACIONAL),
-                new Estado(5, 9, Carretera.NACIONAL));
+                new Estado(0, 0, Carretera.NACIONAL),
+                new Estado(9, 9, Carretera.NACIONAL)
+            );
 
             solucion = mapa.AStar( new DistanciaManhattan() );
 
@@ -398,8 +399,8 @@ public class AppTest {
                 10,
                 10,
                 "../data/custom-map-10x10.csv",
-                new Estado(2, 1, Carretera.NACIONAL),
-                new Estado(5, 9, Carretera.NACIONAL)
+                new Estado(0, 0, Carretera.NACIONAL),
+                new Estado(9, 9, Carretera.NACIONAL)
             );
 
             solucion = mapa.AStar( new DistanciaEuclidea() );
@@ -433,8 +434,8 @@ public class AppTest {
                 10,
                 10,
                 "../data/custom-map-10x10.csv",
-                new Estado(2, 1, Carretera.NACIONAL),
-                new Estado(5, 9, Carretera.NACIONAL)
+                new Estado(0, 0, Carretera.NACIONAL),
+                new Estado(9, 9, Carretera.NACIONAL)
             );
 
             solucion = mapa.AStar( new DiferenciaCarreteras() );
